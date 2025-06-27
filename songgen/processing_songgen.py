@@ -7,10 +7,15 @@ import librosa
 import soundfile as sf
 from transformers import AutoTokenizer
 from .lyrics_utils.lyrics_tokenizer import VoiceBpeTokenizer
+from transformers.models.encodec.feature_extraction_encodec import EncodecFeatureExtractor
 from transformers import Wav2Vec2FeatureExtractor
 from demucs import pretrained
 from demucs.apply import apply_model
 from demucs.audio import convert_audio
+from songgen import (
+    XCodecModel,
+    build_delay_pattern_mask,
+)
 
 class SongGenProcessor():
     def __init__(self, ckpt_path, device):
@@ -23,9 +28,20 @@ class SongGenProcessor():
         mert_path = 'm-a-p/MERT-v1-330M'
         self.mert_processor = Wav2Vec2FeatureExtractor.from_pretrained(mert_path)
         self.demucs = pretrained.get_model("htdemucs").to(device)
+        self.feature_extractor =  EncodecFeatureExtractor(sampling_rate=16000)
+        self.audio_encoder = XCodecModel()
+        self.audio_encoder_special_token_ids ={
+            'mask': 1030,
+            "random": {"bos": 1031 , "eos": 1032}, 
+            "melody": {"bos": 1033, "eos": 1034},
+            "drum": {"bos": 1035, "eos": 1036},
+            "vocal": {"bos": 1037, "eos": 1038},
+            "acc": {"bos":1039 , "eos":1040},
+        }
+        
         
     
-    def __call__(self, text: str, lyrics: str, ref_voice_path=None, start=0, separate=False, padding=True, return_tensors="pt"):
+    def __call__(self, text: str, lyrics: str, refaudio_path=None, refaudio_type=None, ref_voice_path=None, start=0, separate=False, padding=True, return_tensors="pt"):
         
         """
         Processes the input text, lyrics, and audio file, and returns the tensors suitable for model input.
@@ -94,5 +110,32 @@ class SongGenProcessor():
    
             model_inputs['ref_voice_values'] = mert_inputs['input_values'].to(self.device)
             model_inputs['ref_voice_attention_mask'] = mert_inputs['attention_mask'].to(self.device)
-
+        
+        if refaudio_path is not None and refaudio_type is not None:
+            refaudio_wav, refaudio_sr = sf.read(refaudio_path)
+            refaudio_wav = refaudio_wav.T 
+            refaudio_wav = librosa.to_mono(refaudio_wav)
+            if refaudio_sr != self.feature_extractor.sampling_rate:  
+                refaudio_wav = librosa.resample(refaudio_wav, orig_sr=refaudio_sr, target_sr=self.feature_extractor.sampling_rate)
+                refaudio_sr = self.feature_extractor.sampling_rate
+            with torch.no_grad():
+                self.audio_encoder.model.to(self.device)
+                codes = self.audio_encoder.encode(input_values=torch.tensor(refaudio_wav, dtype=torch.float32).to(self.device).unsqueeze(0).unsqueeze(0), bandwidth=4)["audio_codes"] #(1, bsz, codebooks, seq_len)
+                codes = codes.to(self.device).squeeze(0)  # (1, bsz, codebooks, seq_len) -> (1, codebooks, seq_len)
+            num_codebooks = codes.shape[-2]
+            #apply codebook-delay
+            bos = self.audio_encoder_special_token_ids[refaudio_type]['bos']
+            eos = self.audio_encoder_special_token_ids[refaudio_type]['eos']
+            ref_bos = (torch.ones((1, num_codebooks, 1)) * bos).to(self.device)
+            codes = torch.cat([ref_bos, codes], dim=-1)
+            _, delay_pattern_mask = build_delay_pattern_mask(
+                codes,
+                bos_token_id=bos,
+                pad_token_id=eos,
+                max_length=codes.shape[-1] + num_codebooks,
+                num_codebooks=num_codebooks,
+            )
+            delay_codes = torch.where(delay_pattern_mask == -1, eos, delay_pattern_mask) #( codebooks, seq_len) 
+            model_inputs['ref_audio_ids'] = delay_codes.transpose(0,1).unsqueeze(0)  #(bsz, seq_len, codebooks) 
+            #Xcode codes and build delay
         return model_inputs

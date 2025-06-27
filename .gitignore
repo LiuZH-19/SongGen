@@ -3,6 +3,9 @@ __pycache__/
 /songgen/processing_songgen_old.py
 /songgen/xcodec_wrapper/xcodec_infer/ckpts/general_more/xcodec_hubert_general_audio_v2.pth
 /songgen/xcodec_wrapper/xcodec_infer/ckpts/requirement.txt
+/songgen/modeling_songgen_dual_track_refaudio.py
+/songgen/modeling_songgen_mixed_refaudio.py
+/songgen/processing_songgen_norefaudio.py
 /training/
 /jupyter
 /outputs

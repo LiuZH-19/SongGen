@@ -24,6 +24,10 @@
 
 
 ## 📜 News
+🚀 [2025/6/27] We released the checkpoint of SongGen Interleaving (A-V) at [Huggingface🤗](https://huggingface.co/LiuZH-19/SongGen_interleaving_A_V).
+
+🎉 [2025/5/1] SongGen is accepted by ICML 2025!
+
 🚀 [2025/3/18] We released the checkpoint of SongGen Mixed_Pro at [Huggingface🤗](https://huggingface.co/LiuZH-19/SongGen_mixed_pro).
 
 🚀 [2025/2/19] The [paper](https://arxiv.org/abs/2502.13128) and [demo page](https://liuzh-19.github.io/SongGen/) are released!
@@ -40,8 +44,7 @@
 ## 👨‍💻 Todo
 - [ ] Release annotated data and preprocessing pipeline
 - [ ] Release SongGen training code
-- [ ] Develop an audio upsampling renderer
-- [ ] Release SongGen (Interleaving A-V) checkpoint
+- [x] Release SongGen (Interleaving A-V) checkpoint
 - [x] Release SongGen Mixed_pro checkpoint
 - [x] Release SongGen inference code 
 - [x] SongGen demo
@@ -125,7 +128,7 @@ from songgen import (
 )
 import soundfile as sf
 
-ckpt_path = "..." # Path to the pretrained model
+ckpt_path = "LiuZH-19/SongGen_interleaving_A_V" # Path to the pretrained model
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 model = SongGenDualTrackForConditionalGeneration.from_pretrained(
     ckpt_path,
