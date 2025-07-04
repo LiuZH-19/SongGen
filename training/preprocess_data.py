@@ -49,7 +49,6 @@ from accelerate import Accelerator, skip_first_batches
 from accelerate.utils import set_seed, AutocastKwargs, InitProcessGroupKwargs, TorchDynamoPlugin, DistributedDataParallelKwargs
 from accelerate.utils.memory import release_memory
 
-# from training.custom_audio_feature import MyAudio
 
 from songgen import (
     build_delay_pattern_mask,
