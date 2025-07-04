@@ -134,7 +134,7 @@ The script [`preprocess_data.py`](/training/preprocess_data.py) performs the fol
 4. Save the processed data to the specified "save_to_disk" directory.
 
 
-we provide an example JSON config file [`data_musiccaps.json`](./helpers/training_configs/data_musiccaps.json) for MusicCaps. To process the MusicCaps dataset with this configuration, execute the following command:
+we provide an example JSON config file [`data_musiccaps.json`](/helpers/training_configs/data_musiccaps.json) for MusicCaps. To process the MusicCaps dataset with this configuration, execute the following command:
 
 ```sh
 accelerate launch ./training/preprocess_data.py  ./helpers/training_configs/data_musiccaps.json

@@ -80,5 +80,5 @@ if __name__ == "__main__":
 
 
 
-#  srun -p mllm --gres=gpu:1 --quotatype=spot python helpers/model_init_scripts/init_model_mixed.py ./outputs/untrained-mixed_pro  --text_model "google/flan-t5-large"  --track_pattern mixed_pro
+
 
