@@ -3,11 +3,23 @@ __pycache__/
 /songgen/processing_songgen_old.py
 /songgen/xcodec_wrapper/xcodec_infer/ckpts/general_more/xcodec_hubert_general_audio_v2.pth
 /songgen/xcodec_wrapper/xcodec_infer/ckpts/requirement.txt
-/training/
+/songgen/modeling_songgen_dual_track_refaudio.py
+/songgen/modeling_songgen_mixed_refaudio.py
+/songgen/processing_songgen_norefaudio.py
+/training_huoshan_valid/
+/training/inference_multi_SongGen_2stage.py
+/training/run_songgen_training_dual_track_refaudio.py
+/training/run_songgen_training_mixed_refaudio.py
+
 /jupyter
 /outputs
-/helpers
+/helpers/training_configs_valid_houshan
 /helpers/push_to_hub_scripts
+/helpers/training_configs/Debug_dual_train.json
+/helpers/training_configs/Debug_mixed_pro_train.json
+/helpers/training_configs/two_stage_L2V.json
+/helpers/training_configs/two_stage_V2A.json
+/datasets
 requirement.txt
 # setup.py
 /scripts

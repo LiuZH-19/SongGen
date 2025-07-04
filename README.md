@@ -16,7 +16,9 @@
 <p align="center" style="font-size: 5 em; margin-top: 0.5em">
 <a href="https://arxiv.org/abs/2502.13128"><img src="https://img.shields.io/badge/arXiv-<color>"></a>
 <a href="https://github.com/LiuZH-19/SongGen"><img src="https://img.shields.io/badge/Code-red"></a>
-<a href="https://liuzh-19.github.io/SongGen/"><img src="https://img.shields.io/badge/Demo-yellow"></a>
+<a href="https://liuzh-19.github.io/SongGen/"><img src="https://img.shields.io/badge/Demo-20d67c"></a>
+<a href="https://huggingface.co/collections/LiuZH-19/songgen-a-single-stage-auto-regressive-transformer-for-text-6867ec21169d808034f6d252">
+    <img src="https://img.shields.io/badge/HF-Collection-yellow"></a>
 </p>
 
 
@@ -24,6 +26,14 @@
 
 
 ## 📜 News
+🚀 [2025/7/4] We released the training code along with a detailed [training guide](./training/README.md) .
+
+🚀 [2025/6/30] The MusicCaps Test Set is now available on [Huggingface🤗](https://huggingface.co/datasets/LiuZH-19/MusicCaps_Test_Song) for text-to-song eveluation.
+
+🚀 [2025/6/27] We released the checkpoint of SongGen Interleaving (A-V) at [Huggingface🤗](https://huggingface.co/LiuZH-19/SongGen_interleaving_A_V).
+
+🎉 [2025/5/1] SongGen is accepted by ICML 2025!
+
 🚀 [2025/3/18] We released the checkpoint of SongGen Mixed_Pro at [Huggingface🤗](https://huggingface.co/LiuZH-19/SongGen_mixed_pro).
 
 🚀 [2025/2/19] The [paper](https://arxiv.org/abs/2502.13128) and [demo page](https://liuzh-19.github.io/SongGen/) are released!
@@ -39,9 +49,9 @@
 
 ## 👨‍💻 Todo
 - [ ] Release annotated data and preprocessing pipeline
-- [ ] Release SongGen training code
-- [ ] Develop an audio upsampling renderer
-- [ ] Release SongGen (Interleaving A-V) checkpoint
+- [x] Release Musiccaps Test set
+- [x] Release SongGen training code
+- [x] Release SongGen (Interleaving A-V) checkpoint
 - [x] Release SongGen Mixed_pro checkpoint
 - [x] Release SongGen inference code 
 - [x] SongGen demo
@@ -125,7 +135,7 @@ from songgen import (
 )
 import soundfile as sf
 
-ckpt_path = "..." # Path to the pretrained model
+ckpt_path = "LiuZH-19/SongGen_interleaving_A_V" # Path to the pretrained model
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 model = SongGenDualTrackForConditionalGeneration.from_pretrained(
     ckpt_path,
@@ -151,6 +161,10 @@ vocal_array = vocal_array[:min_len]
 audio_arr = vocal_array + acc_array
 sf.write("songgen_out.wav", audio_arr, model.config.sampling_rate)
 ```
+
+### 4. Training
+
+The [training folder](./training) contains all the information to train or fine-tune your own SongGen model. See the [training guide](./training/README.md) for step-by-step instructions.
 
 
 

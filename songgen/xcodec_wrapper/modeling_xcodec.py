@@ -126,7 +126,7 @@ class XCodecModel(nn.Module):
     def decode(
         self,
         audio_codes,
-        audio_scales,
+        audio_scales=None,
         padding_mask=None,
         return_dict=None,
     ):

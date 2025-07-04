@@ -1,0 +1,53 @@
+{
+    "model_name_or_path": "./outputs/untrained-mixed_pro/untrained-mixed_pro",
+    "save_to_disk":  "./datasets/MusicCaps_Test_Song/musiccaps_SingTest_vectorized/",
+    "temporary_save_to_disk": "./datasets/MusicCaps_Test_Song/musiccaps_SingTest_code/",
+   
+    "overwrite_output_dir": false,
+    "output_dir": "./outputs/pub_data_musiccaps",
+
+    "feature_extractor_name":"xcodec",
+    "description_tokenizer_name":"google/flan-t5-large",
+    "prompt_tokenizer_name":"google/flan-t5-large",
+
+    "loading_method": "json",
+    "train_dataset_name": "./datasets/MusicCaps_Test_Song/metadata_abspath.jsonl",
+    "train_dataset_config_name": "default",
+    "train_split_name": "train",
+
+    "eval_dataset_name": "./datasets/MusicCaps_Test_Song/metadata_abspath.jsonl",
+    "eval_dataset_config_name": "default",
+    "eval_split_name": "train",
+    "max_eval_samples": 24,
+
+    "target_audio_column_name": "audio_abspath", 
+    "ref_voice_column_name": "vocal_abspath",
+    "ref_audio_column_name": ["vocal_abspath", "acc_abspath", "drum_abspath"],
+    "ref_dur_sec": 3,
+    "description_column_name": "caption",
+    "prompt_column_name": "lyrics",
+
+    "do_eval": true, 
+    "do_train": true, 
+
+
+    "max_duration_in_seconds": 30,
+    "min_duration_in_seconds": 2.0,
+    "max_text_length": 600,
+
+    "group_by_length": true,
+
+    "add_audio_samples_to_wandb": true,
+    "id_column_name": "fname",
+
+    "preprocessing_num_workers": 1,
+
+    "audio_encoder_per_device_batch_size":1,
+    "dtype": "bfloat16",
+    "seed": 456,
+
+    "dataloader_num_workers":8,
+    "attn_implementation": "sdpa",
+    "ddp_timeout":1800,
+    "preprocessing_only":true
+}
