@@ -1,5 +1,0 @@
-$include:
-  - conf/base.yml
-  - conf/1gpu.yml
-
-DAC.decoder_dim: 512
